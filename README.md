@@ -94,5 +94,3 @@ const jobBoards = [
 
 - LinkedIn - [@avion-cobb](https://www.linkedin.com/in/avion-cobb/)
 - Twitter - [@Blvck_Lotus003](https://twitter.com/Blvck_Lotus003)
-
-#
