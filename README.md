@@ -85,9 +85,10 @@ const jobBoards = [
 
 ## <a name="links">Links</a>
 
-Docs
-[Puppeteer](https://pptr.dev/category/introduction)
-[Avoiding Bot Detection](https://www.zenrows.com/blog/puppeteer-avoid-detection#puppeteer-stealth)
+**Docs**
+
+- [Puppeteer](https://pptr.dev/category/introduction)
+- [Avoiding Bot Detection](https://www.zenrows.com/blog/puppeteer-avoid-detection#puppeteer-stealth)
 
 ## <a name="more">Author</a>
 
