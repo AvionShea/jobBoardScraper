@@ -23,7 +23,7 @@ const { executablePath } = require('puppeteer');
             name: "Indeed", //website name
             url: "https://www.indeed.com/", //website URL
             searchBar: "input[id='text-input-what']", //search bar url
-            searchBtn: "button[class='yosegi-InlineWhatWhere-primaryButton']", // search button url
+            searchJobTitle: "button[class='yosegi-InlineWhatWhere-primaryButton']", // search button url
             searchLocation: "input[id='text-input-where']", //search by location
             clearSearch: "#jobsearch > div > div.css-13s6tc1.eu4oa1w0 > div.css-1jk1vg0.eu4oa1w0 > div > div > span > span.css-16oh2fs.e6fjgti0", //clears default location
         }
@@ -35,13 +35,13 @@ const { executablePath } = require('puppeteer');
     for (const board of jobBoards) {
         const searchUrl = `${board.url}`
         const searchBar = board.searchBar
-        const searchBtn = board.searchBtn
+        const searchJobTitle = board.searchJobTitle
         const searchLocation = board.searchLocation
         const clearSearch = board.clearSearch
 
         await page.goto(searchUrl, { waitUntil: 'networkidle2' })
 
-        await page.locator(searchBar).fill(jobTitle);
+        await page.locator(searchJobTitle).fill(jobTitle);
 
         await page.locator(clearSearch).click();
 
