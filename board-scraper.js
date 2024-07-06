@@ -17,7 +17,7 @@ const { executablePath } = require('puppeteer');
     const page = await browser.newPage(); // opens new blank page
 
     const jobTitle = "Software Engineer"; //enter job tile searching for
-    const jobLocation = "Morrisville, NC" //enter city, state, zip code, or "remote" of location wanted
+    const jobLocation = "27560" //enter city, state, zip code, or "remote" of location wanted
     const jobBoards = [
         {
             name: "Indeed", //website name
