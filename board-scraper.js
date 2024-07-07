@@ -38,7 +38,7 @@ const { executablePath } = require('puppeteer');
             titleSelector: "h2[class='jobTitle css-198pbd eu4oa1w0']",
             companySelector: "span[class='css-63koeb eu4oa1w0']",
             locationSelector: "div[data-testid='text-location']",
-            linkSelector: "",
+            //linkSelector: "",
 
         }
     ];
@@ -116,17 +116,16 @@ const { executablePath } = require('puppeteer');
                 const title = jobElement.querySelector(board.titleSelector)?.innerText.trim();
                 const company = jobElement.querySelector(board.companySelector)?.innerText.trim();
                 const location = jobElement.querySelector(board.locationSelector)?.innerText.trim();
+                //const link = jobElement.querySelector(board.link)?.innerText.trim();
 
-                return { title, company, location };
+                return { title, company, location, /*link*/ };
             });
         }, board);
 
-        jobs.forEach(job => {
-            console.log(`Title: ${job.title}`);
-            console.log(`Company: ${job.company}`);
-            console.log(`Location: ${job.location}`);
-            console.log('---');
-        });
+        jobResults.push(...jobs);
+
     }
+
+    console.log(jobResults)
 
 })();

@@ -90,6 +90,12 @@ const jobBoards = [
 - [Puppeteer](https://pptr.dev/category/introduction)
 - [Avoiding Bot Detection](https://www.zenrows.com/blog/puppeteer-avoid-detection#puppeteer-stealth)
 
+## <a name="links">Challenges</a>
+
+**Challenges I faced**
+
+- Appointing the correct selectors for the scraper to utilize.
+
 ## <a name="more">Author</a>
 
 - LinkedIn - [@avion-cobb](https://www.linkedin.com/in/avion-cobb/)
