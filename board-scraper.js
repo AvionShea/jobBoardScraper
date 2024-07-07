@@ -26,6 +26,14 @@ const { executablePath } = require('puppeteer');
             clearSearch: "#jobsearch > div > div.css-13s6tc1.eu4oa1w0 > div.css-1jk1vg0.eu4oa1w0 > div > div > span > span.css-16oh2fs.e6fjgti0", //clears default location
             searchLocation: "input[id='text-input-where']", //search by location
             searchBtn: "button[class='yosegi-InlineWhatWhere-primaryButton']", // search button url
+            datePostedFilter: "#filter-dateposted",
+            datePostedFilterMenu: "#filter-dateposted-menu",
+            dropdownList: "yosegi-FilterPill-dropdownList",
+            dropdownListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
+            dropdownDatePostedOptionOne: "Last 24 hours",
+            dropdownDatePostedOptionTwo: "Last 3 days",
+            dropdownDatePostedOptionThree: "Last 7 days",
+            dropdownDatePostedOptionFour: "Last 14 days",
         }
     ];
 
@@ -33,11 +41,19 @@ const { executablePath } = require('puppeteer');
     const jobResults = [];
 
     for (const board of jobBoards) {
-        const searchUrl = `${board.url}`
-        const searchJobTitle = board.searchJobTitle
-        const searchLocation = board.searchLocation
-        const searchBtn = board.searchBtn
-        const clearSearch = board.clearSearch
+        const searchUrl = `${board.url}`;
+        const searchJobTitle = board.searchJobTitle;
+        const searchLocation = board.searchLocation;
+        const searchBtn = board.searchBtn;
+        const clearSearch = board.clearSearch;
+        const datePostedFilter = board.datePostedFilter;
+        const datePostedFilterMenu = board.datePostedFilterMenu;
+        const dropdownList = board.dropdownList;
+        const dropdownListItemLink = board.dropdownListItemLink;
+        const dropdownDatePostedOptionOne = board.dropdownDatePostedOptionOne;
+        const dropdownDatePostedOptionTwo = board.dropdownDatePostedOptionTwo;
+        const dropdownDatePostedOptionThree = board.dropdownDatePostedOptionThree;
+        const dropdownDatePostedOptionFour = board.dropdownDatePostedOptionFour;
 
         await page.goto(searchUrl, { waitUntil: 'networkidle2' })
 
@@ -48,6 +64,21 @@ const { executablePath } = require('puppeteer');
         await page.locator(searchLocation).fill(jobLocation);
 
         await page.locator(searchBtn).click();
+
+        await page.locator(datePostedFilter).click(dropdownList);
+
+        await page.waitForSelector(datePostedFilterMenu);
+
+        await page.evaluate((dropdownListItemLink, dropdownDatePostedOptionOne) => {
+
+            const dropdownItems = Array.from(document.querySelectorAll(dropdownListItemLink));
+
+            const dropdownTimeframe = dropdownItems.find(item => item.innerText.includes(dropdownDatePostedOptionOne));
+
+            if (dropdownTimeframe) {
+                dropdownTimeframe.click();
+            }
+        }, dropdownListItemLink, dropdownDatePostedOptionOne);
 
 
     }
