@@ -28,12 +28,12 @@ const { executablePath } = require('puppeteer');
             searchBtn: "button[class='yosegi-InlineWhatWhere-primaryButton']", // search button url
             datePostedFilter: "#filter-dateposted",
             datePostedFilterMenu: "#filter-dateposted-menu",
-            dropdownList: "yosegi-FilterPill-dropdownList",
-            dropdownListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
-            dropdownDatePostedOptionOne: "Last 24 hours",
-            dropdownDatePostedOptionTwo: "Last 3 days",
-            dropdownDatePostedOptionThree: "Last 7 days",
-            dropdownDatePostedOptionFour: "Last 14 days",
+            dropdownDatePostedList: "yosegi-FilterPill-dropdownList",
+            dropdownDatePostedListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
+            dropdownDatePostedOption: "Last 7 days", // change based on available dropdown date posted options
+            expLvlFilter: "#filter-explvl",
+            expLvlFilterMenu: "",
+
         }
     ];
 
@@ -48,12 +48,9 @@ const { executablePath } = require('puppeteer');
         const clearSearch = board.clearSearch;
         const datePostedFilter = board.datePostedFilter;
         const datePostedFilterMenu = board.datePostedFilterMenu;
-        const dropdownList = board.dropdownList;
-        const dropdownListItemLink = board.dropdownListItemLink;
-        const dropdownDatePostedOptionOne = board.dropdownDatePostedOptionOne;
-        const dropdownDatePostedOptionTwo = board.dropdownDatePostedOptionTwo;
-        const dropdownDatePostedOptionThree = board.dropdownDatePostedOptionThree;
-        const dropdownDatePostedOptionFour = board.dropdownDatePostedOptionFour;
+        const dropdownDatePostedList = board.dropdownDatePostedList;
+        const dropdownDatePostedListItemLink = board.dropdownDatePostedListItemLink;
+        const dropdownDatePostedOption = board.dropdownDatePostedOption;
 
         await page.goto(searchUrl, { waitUntil: 'networkidle2' })
 
@@ -65,20 +62,20 @@ const { executablePath } = require('puppeteer');
 
         await page.locator(searchBtn).click();
 
-        await page.locator(datePostedFilter).click(dropdownList);
+        await page.locator(datePostedFilter).click(dropdownDatePostedList);
 
         await page.waitForSelector(datePostedFilterMenu);
 
-        await page.evaluate((dropdownListItemLink, dropdownDatePostedOptionOne) => {
+        await page.evaluate((dropdownDatePostedListItemLink, dropdownDatePostedOption) => {
 
-            const dropdownItems = Array.from(document.querySelectorAll(dropdownListItemLink));
+            const dropdownItems = Array.from(document.querySelectorAll(dropdownDatePostedListItemLink));
 
-            const dropdownTimeframe = dropdownItems.find(item => item.innerText.includes(dropdownDatePostedOptionOne));
+            const dropdownTimeframe = dropdownItems.find(item => item.innerText.includes(dropdownDatePostedOption));
 
             if (dropdownTimeframe) {
                 dropdownTimeframe.click();
             }
-        }, dropdownListItemLink, dropdownDatePostedOptionOne);
+        }, dropdownDatePostedListItemLink, dropdownDatePostedOption);
 
 
     }
