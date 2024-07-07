@@ -17,7 +17,7 @@ const { executablePath } = require('puppeteer');
     const page = await browser.newPage(); // opens new blank page
 
     const jobTitle = "Software Engineer"; //enter job tile searching for
-    const jobLocation = "27560" //enter city, state, zip code, or "remote" of location wanted
+    const jobLocation = "27518" //enter city, state, zip code, or "remote" of location wanted
     const jobBoards = [
         {
             name: "Indeed", //website name
@@ -30,10 +30,15 @@ const { executablePath } = require('puppeteer');
             datePostedFilterMenu: "#filter-dateposted-menu",
             dropdownList: ".yosegi-FilterPill-dropdownList",
             dropdownListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
-            dropdownDatePostedOption: "Last 7 days", // change based on available dropdown date posted options
+            dropdownDatePostedOption: "Last 14 days", // change based on available dropdown date posted options
             expLvlFilter: "#filter-explvl",
             expLvlFilterMenu: "#filter-explvl-menu",
             expLvlDropdownOption: "Entry Level", //change based on available level options
+            cardsSelector: "div[class='job_seen_beacon']",
+            titleSelector: "h2[class='jobTitle css-198pbd eu4oa1w0']",
+            companySelector: "span[class='css-63koeb eu4oa1w0']",
+            locationSelector: "div[data-testid='text-location']",
+            linkSelector: "",
 
         }
     ];
@@ -55,6 +60,9 @@ const { executablePath } = require('puppeteer');
         const expLvlFilterMenu = board.expLvlFilterMenu;
         const dropdownListItemLink = board.dropdownListItemLink;
         const expLvlDropdownOption = board.expLvlDropdownOption;
+        const cardsSelector = board.cardsSelector;
+
+
 
         await page.goto(searchUrl, { waitUntil: 'networkidle2' })
 
@@ -67,7 +75,7 @@ const { executablePath } = require('puppeteer');
         await page.locator(searchBtn).click();
 
 
-
+        // time frame posted selector
         await page.locator(datePostedFilter).click(dropdownList);
 
         await page.waitForSelector(datePostedFilterMenu);
@@ -84,7 +92,7 @@ const { executablePath } = require('puppeteer');
         }, dropdownListItemLink, dropdownDatePostedOption);
 
 
-
+        //exp lvl selector
         await page.locator(expLvlFilter).click(dropdownList);
 
         await page.waitForSelector(expLvlFilterMenu);
@@ -100,7 +108,25 @@ const { executablePath } = require('puppeteer');
             }
         }, dropdownListItemLink, expLvlDropdownOption);
 
+        await page.locator(cardsSelector).click()
 
+
+        const jobs = await page.$$eval(board.cardsSelector, (jobElements, board) => {
+            return jobElements.map((jobElement) => {
+                const title = jobElement.querySelector(board.titleSelector)?.innerText.trim();
+                const company = jobElement.querySelector(board.companySelector)?.innerText.trim();
+                const location = jobElement.querySelector(board.locationSelector)?.innerText.trim();
+
+                return { title, company, location };
+            });
+        }, board);
+
+        jobs.forEach(job => {
+            console.log(`Title: ${job.title}`);
+            console.log(`Company: ${job.company}`);
+            console.log(`Location: ${job.location}`);
+            console.log('---');
+        });
     }
 
 })();
