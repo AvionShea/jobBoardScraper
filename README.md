@@ -84,7 +84,7 @@ const jobBoards = [
 
 </details>
 
-## <a name="links">Links</a>
+## <a name="links">Docs</a>
 
 **Docs**
 
