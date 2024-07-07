@@ -5,8 +5,9 @@
 3. [Features](#features)
 4. [Quick Start](#quick-start)
 5. [Code Snippets to Copy](#snippets)
-6. [Assets](#links)
-7. [More](#more)
+6. [Documents](#links)
+7. [Challenges and Successes](#challengesAndSuccesses)
+8. [More](#more)
 
 ## <a name="introduction">Introduction</a>
 
@@ -90,11 +91,13 @@ const jobBoards = [
 - [Puppeteer](https://pptr.dev/category/introduction)
 - [Avoiding Bot Detection](https://www.zenrows.com/blog/puppeteer-avoid-detection#puppeteer-stealth)
 
-## <a name="links">Challenges</a>
+## <a name="challengesAndSuccesses">Challenges and Successes</a>
 
-**Challenges I faced**
+**Challenges I overcame**
 
 - Appointing the correct selectors for the scraper to utilize.
+
+**Successes**
 
 ## <a name="more">Author</a>
 
