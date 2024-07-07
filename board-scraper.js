@@ -28,11 +28,14 @@ const { executablePath } = require('puppeteer');
             searchBtn: "button[class='yosegi-InlineWhatWhere-primaryButton']", // search button url
             datePostedFilter: "#filter-dateposted",
             datePostedFilterMenu: "#filter-dateposted-menu",
-            dropdownDatePostedList: "yosegi-FilterPill-dropdownList",
+            dropdownDatePostedList: ".yosegi-FilterPill-dropdownList",
             dropdownDatePostedListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
             dropdownDatePostedOption: "Last 7 days", // change based on available dropdown date posted options
             expLvlFilter: "#filter-explvl",
-            expLvlFilterMenu: "",
+            expLvlFilterMenu: "#filter-explvl-menu",
+            expLvlDropdownList: ".yosegi-FilterPill-dropdownList",
+            expLvlDropdownListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
+            expLvlDropdownOption: "Entry Level", //change based on available level options
 
         }
     ];
@@ -51,6 +54,11 @@ const { executablePath } = require('puppeteer');
         const dropdownDatePostedList = board.dropdownDatePostedList;
         const dropdownDatePostedListItemLink = board.dropdownDatePostedListItemLink;
         const dropdownDatePostedOption = board.dropdownDatePostedOption;
+        const expLvlFilter = board.expLvlFilter;
+        const expLvlFilterMenu = board.expLvlFilterMenu;
+        const expLvlDropdownList = board.expLvlDropdownList;
+        const expLvlDropdownListItemLink = board.expLvlDropdownListItemLink;
+        const expLvlDropdownOption = board.expLvlDropdownOption;
 
         await page.goto(searchUrl, { waitUntil: 'networkidle2' })
 
@@ -76,6 +84,21 @@ const { executablePath } = require('puppeteer');
                 dropdownTimeframe.click();
             }
         }, dropdownDatePostedListItemLink, dropdownDatePostedOption);
+
+        await page.locator(expLvlFilter).click(expLvlDropdownList);
+
+        await page.waitForSelector(expLvlFilterMenu);
+
+        await page.evaluate((expLvlDropdownListItemLink, expLvlDropdownOption) => {
+
+            const expLvlItems = Array.from(document.querySelectorAll(expLvlDropdownListItemLink));
+
+            const expLvl = expLvlItems.find(expElement => expElement.innerText.includes(expLvlDropdownOption));
+
+            if (expLvl) {
+                expLvl.click();
+            }
+        }, expLvlDropdownListItemLink, expLvlDropdownOption);
 
 
     }
