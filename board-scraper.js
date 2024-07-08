@@ -11,13 +11,13 @@ const { executablePath } = require('puppeteer');
 (async () => {
 
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: false, //grants the ability to see browser actions if set to "false"
         executablePath: executablePath(),
-    }); //launch browser and see it navigate
+    });
     const page = await browser.newPage(); // opens new blank page
 
     const jobTitle = "Software Engineer"; //enter job tile searching for
-    const jobLocation = "27518" //enter city, state, zip code, or "remote" of location wanted
+    const jobLocation = "27603" //enter city, state, zip code, or "remote" of location wanted
     const jobBoards = [
         {
             name: "Indeed", //website name
@@ -38,7 +38,7 @@ const { executablePath } = require('puppeteer');
             titleSelector: "h2[class='jobTitle css-198pbd eu4oa1w0']",
             companySelector: "span[class='css-63koeb eu4oa1w0']",
             locationSelector: "div[data-testid='text-location']",
-            //linkSelector: "",
+            linkSelector: "h2[class='jobTitle css-198pbd eu4oa1w0'] > a",
 
         }
     ];
@@ -116,9 +116,9 @@ const { executablePath } = require('puppeteer');
                 const title = jobElement.querySelector(board.titleSelector)?.innerText.trim();
                 const company = jobElement.querySelector(board.companySelector)?.innerText.trim();
                 const location = jobElement.querySelector(board.locationSelector)?.innerText.trim();
-                //const link = jobElement.querySelector(board.link)?.innerText.trim();
+                const link = jobElement.querySelector(board.linkSelector)?.href.trim();
 
-                return { title, company, location, /*link*/ };
+                return { title, company, location, link };
             });
         }, board);
 
