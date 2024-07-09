@@ -3,12 +3,23 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 const { executablePath } = require('puppeteer');
 
-//const nodemailer = require('nodemailer');
-//const cron = require('node-cron');
+require("dotenv").config()
+
+const admin = process.env.ADMIN;
+const adminPassword = process.env.ADMIN_EMAIL_PASSWORD
+const recipientEmail = process.env.RECIPIENT_EMAIL
+
+const nodemailer = require('nodemailer');
+const cron = require('node-cron');
+
+const email = admin //replace with your email
+const emailPassword = adminPassword; //replace with your email password
+const userEmail = recipientEmail; //replace with recipient email
+const deliveryFrequency = "*/30 * * * * *"; //Cron schedule
 
 
 
-(async () => {
+async function scrapeJobs() {
 
     const browser = await puppeteer.launch({
         headless: false, //grants the ability to see browser actions if set to "false"
@@ -16,7 +27,7 @@ const { executablePath } = require('puppeteer');
     });
     const page = await browser.newPage(); // opens new blank page
 
-    const jobTitle = "Software Engineer"; //enter job tile searching for
+    const jobTitle = "Software Developer"; //enter job tile searching for
     const jobLocation = "27603" //enter city, state, zip code, or "remote" of location wanted
     const jobBoards = [
         {
@@ -126,6 +137,58 @@ const { executablePath } = require('puppeteer');
 
     }
 
-    console.log(jobResults)
+    //await browser.close();
+    console.log(jobResults);
 
-})();
+}
+
+function formatEmailBody(jobs) {
+    return jobs.map((job) =>
+
+        `<div>
+        <h3><a href="${job.link}">${job.title}</a></h3>
+        <p>${job.company} - ${job.location}</p>
+        </div>`
+    ).join("<br>");
+}
+
+async function sendEmail(jobs) {
+    let transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: email,
+            pass: emailPassword
+        },
+    });
+
+    let mailDetails = {
+        from: email,
+        to: userEmail,
+        subject: `Job Listings for ${jobTitle}`,
+        html: formatEmailBody(jobs)
+    };
+
+    await transporter.sendMail(mailDetails,
+        function (err) {
+
+            if (err) {
+
+                console.log('Error Occurred');
+
+            } else {
+
+                console.log('Email sent successfully');
+
+            }
+        });
+}
+
+async function jobScraperAndSender() {
+    const jobs = await scrapeJobs();
+    await sendEmail(jobs);
+}
+
+// Schedule the job scraper and sender
+cron.schedule(deliveryFrequency, jobScraperAndSender);
+
+console.log(`Job scraper scheduled with frequency: ${deliveryFrequency}`);
