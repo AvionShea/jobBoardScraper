@@ -3,18 +3,15 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 const { executablePath } = require('puppeteer');
 
-require("dotenv").config()
-
-const admin = process.env.ADMIN;
-const adminPassword = process.env.ADMIN_EMAIL_PASSWORD
-const recipientEmail = process.env.RECIPIENT_EMAIL
+require('dotenv').config();
 
 const nodemailer = require('nodemailer');
 const cron = require('node-cron');
 
-const email = admin //replace with your email
-const emailPassword = adminPassword; //replace with your email password
-const userEmail = recipientEmail; //replace with recipient email
+
+const email = process.env.ADMIN_EMAIL //replace with your email
+const emailPassword = process.env.ADMIN_EMAIL_PASSWORD; //replace with your email password
+const userEmail = process.env.RECIPIENT_EMAIL; //replace with recipient email
 const deliveryFrequency = "*/30 * * * * *"; //Cron schedule
 
 
@@ -155,16 +152,35 @@ function formatEmailBody(jobs) {
 async function sendEmail(jobs) {
     let transporter = nodemailer.createTransport({
         service: "gmail",
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // Use `true` for port 465, `false` for all other ports
         auth: {
             user: email,
             pass: emailPassword
         },
+        tls: {
+            // do not fail on invalid certs
+            rejectUnauthorized: false,
+        }
+
+
+    });
+
+    // verify connection configuration
+    transporter.verify(function (error, success) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log("Server is ready to take our messages");
+        }
     });
 
     let mailDetails = {
-        from: email,
+        from: "no-reply@example.com",
         to: userEmail,
         subject: `Job Listings for ${jobTitle}`,
+        text: jobResults,
         html: formatEmailBody(jobs)
     };
 
