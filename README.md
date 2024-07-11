@@ -107,6 +107,7 @@ const jobBoards = [
 
 - [Puppeteer](https://pptr.dev/category/introduction)
 - [Avoiding Bot Detection](https://www.zenrows.com/blog/puppeteer-avoid-detection#puppeteer-stealth)
+- [How to run Cron Jobs in Node.js?](https://www.geeksforgeeks.org/how-to-run-cron-jobs-in-node-js/amp/)
 
 ## <a name="challengesAndSuccesses">Challenges and Successes</a>
 
