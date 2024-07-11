@@ -72,30 +72,30 @@ Opens in new Chromium browser.
 
 ```javascript
 const jobTitle = "Software Engineer"; //enter job tile searching for
-    const jobLocation = "27603" //enter city, state, zip code, or "remote" of location wanted
-    const jobBoards = [
-        {
-            name: "Indeed", //website name
-            url: "https://www.indeed.com/", //website URL
-            searchJobTitle: "input[id='text-input-what']", //search by job title
-            clearSearch: "#jobsearch > div > div.css-13s6tc1.eu4oa1w0 > div.css-1jk1vg0.eu4oa1w0 > div > div > span > span.css-16oh2fs.e6fjgti0", //clears default location
-            searchLocation: "input[id='text-input-where']", //search by location
-            searchBtn: "button[class='yosegi-InlineWhatWhere-primaryButton']", // search button url
-            datePostedFilter: "#filter-dateposted",
-            datePostedFilterMenu: "#filter-dateposted-menu",
-            dropdownList: ".yosegi-FilterPill-dropdownList",
-            dropdownListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
-            dropdownDatePostedOption: "Last 14 days", // change based on available dropdown date posted options
-            expLvlFilter: "#filter-explvl",
-            expLvlFilterMenu: "#filter-explvl-menu",
-            expLvlDropdownOption: "Entry Level", //change based on available level options
-            cardsSelector: "div[class='job_seen_beacon']",
-            titleSelector: "h2[class='jobTitle css-198pbd eu4oa1w0']",
-            companySelector: "span[class='css-63koeb eu4oa1w0']",
-            locationSelector: "div[data-testid='text-location']",
-            linkSelector: "h2[class='jobTitle css-198pbd eu4oa1w0'] > a",
-
-        },
+const jobLocation = "27603"; //enter city, state, zip code, or "remote" of location wanted
+const jobBoards = [
+  {
+    name: "Indeed", //website name
+    url: "https://www.indeed.com/", //website URL
+    searchJobTitle: "input[id='text-input-what']", //search by job title
+    clearSearch:
+      "#jobsearch > div > div.css-13s6tc1.eu4oa1w0 > div.css-1jk1vg0.eu4oa1w0 > div > div > span > span.css-16oh2fs.e6fjgti0", //clears default location
+    searchLocation: "input[id='text-input-where']", //search by location
+    searchBtn: "button[class='yosegi-InlineWhatWhere-primaryButton']", // search button url
+    datePostedFilter: "#filter-dateposted",
+    datePostedFilterMenu: "#filter-dateposted-menu",
+    dropdownList: ".yosegi-FilterPill-dropdownList",
+    dropdownListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
+    dropdownDatePostedOption: "Last 14 days", // change based on available dropdown date posted options
+    expLvlFilter: "#filter-explvl",
+    expLvlFilterMenu: "#filter-explvl-menu",
+    expLvlDropdownOption: "Entry Level", //change based on available level options
+    cardsSelector: "div[class='job_seen_beacon']",
+    titleSelector: "h2[class='jobTitle css-198pbd eu4oa1w0']",
+    companySelector: "span[class='css-63koeb eu4oa1w0']",
+    locationSelector: "div[data-testid='text-location']",
+    linkSelector: "h2[class='jobTitle css-198pbd eu4oa1w0'] > a",
+  },
 ];
 ```
 
@@ -113,6 +113,7 @@ const jobTitle = "Software Engineer"; //enter job tile searching for
 **Challenges I overcame**
 
 - Appointing the correct selectors for the scraper to utilize.
+- Getting nodemailer to work properly.
 
 **Successes**
 
