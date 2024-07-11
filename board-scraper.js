@@ -3,18 +3,16 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 const { executablePath } = require('puppeteer');
 
-require('dotenv').config();
+require('dotenv').config({ path: "../job-scraper/.env" });
 
 const nodemailer = require('nodemailer');
 const cron = require('node-cron');
 
-
-const email = process.env.ADMIN_EMAIL //replace with your email
-const emailPassword = process.env.ADMIN_EMAIL_PASSWORD; //replace with your email password
-const userEmail = process.env.RECIPIENT_EMAIL; //replace with recipient email
 const deliveryFrequency = "*/30 * * * * *"; //Cron schedule
 
-
+const adminEmail = process.env.ADMIN_EMAIL //replace with your email
+const adminEmailPassword = process.env.ADMIN_EMAIL_PASSWORD; //replace with your email password
+const userEmail = process.env.RECIPIENT_EMAIL; //replace with recipient email
 
 async function scrapeJobs() {
 
@@ -26,6 +24,7 @@ async function scrapeJobs() {
 
     const jobTitle = "Software Developer"; //enter job tile searching for
     const jobLocation = "27603" //enter city, state, zip code, or "remote" of location wanted
+
     const jobBoards = [
         {
             name: "Indeed", //website name
@@ -139,6 +138,7 @@ async function scrapeJobs() {
 
 }
 
+//Send Email
 function formatEmailBody(jobs) {
     return jobs.map((job) =>
 
@@ -153,51 +153,39 @@ async function sendEmail(jobs) {
     let transporter = nodemailer.createTransport({
         service: "gmail",
         host: "smtp.gmail.com",
-        port: 587,
-        secure: false, // Use `true` for port 465, `false` for all other ports
+        port: 465,
+        secure: true, // Use `true` for port 465, `false` for all other ports
         auth: {
-            user: email,
-            pass: emailPassword
+            user: adminEmail,
+            pass: adminEmailPassword
         },
         tls: {
             // do not fail on invalid certs
             rejectUnauthorized: false,
-        }
-
-
+        },
     });
 
     // verify connection configuration
-    transporter.verify(function (error, success) {
+    transporter.verify(function (error) {
         if (error) {
             console.log(error);
         } else {
-            console.log("Server is ready to take our messages");
-        }
+            console.log("Server is ready to take for messages");
+        };
     });
 
     let mailDetails = {
-        from: "no-reply@example.com",
+        from: adminEmail,
         to: userEmail,
         subject: `Job Listings for ${jobTitle}`,
         text: jobResults,
         html: formatEmailBody(jobs)
     };
 
-    await transporter.sendMail(mailDetails,
-        function (err) {
-
-            if (err) {
-
-                console.log('Error Occurred');
-
-            } else {
-
-                console.log('Email sent successfully');
-
-            }
-        });
+    await transporter.sendMail(mailDetails);
 }
+
+sendEmail().catch(console.error)
 
 async function jobScraperAndSender() {
     const jobs = await scrapeJobs();
