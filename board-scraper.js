@@ -136,63 +136,53 @@ async function scrapeJobs() {
     //await browser.close();
     console.log(jobResults);
 
-}
 
-//Send Email
-function formatEmailBody(jobs) {
-    return jobs.map((job) =>
+    //Send Email
+    function formatEmailBody(jobs) {
+        return jobs?.map((job) =>
 
-        `<div>
+            `<div>
         <h3><a href="${job.link}">${job.title}</a></h3>
         <p>${job.company} - ${job.location}</p>
         </div>`
-    ).join("<br>");
-}
+        ).join("<br>");
+    }
 
-async function sendEmail(jobs) {
-    let transporter = nodemailer.createTransport({
-        service: "gmail",
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true, // Use `true` for port 465, `false` for all other ports
-        auth: {
-            user: adminEmail,
-            pass: adminEmailPassword
-        },
-        tls: {
-            // do not fail on invalid certs
-            rejectUnauthorized: false,
-        },
-    });
+    async function sendEmail(jobs) {
+        let transporter = nodemailer.createTransport({
+            service: "gmail",
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true, // Use `true` for port 465, `false` for all other ports
+            auth: {
+                user: adminEmail,
+                pass: adminEmailPassword
+            },
+            tls: {
+                // do not fail on invalid certs
+                rejectUnauthorized: false,
+            },
+        });
 
-    // verify connection configuration
-    transporter.verify(function (error) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log("Server is ready to take for messages");
+        let mailDetails = {
+            from: adminEmail,
+            to: userEmail,
+            subject: `Job Listings for ${jobTitle}`,
+            text: jobResults,
+            html: formatEmailBody(jobs)
         };
-    });
 
-    let mailDetails = {
-        from: adminEmail,
-        to: userEmail,
-        subject: `Job Listings for ${jobTitle}`,
-        text: jobResults,
-        html: formatEmailBody(jobs)
-    };
+        await transporter.sendMail(mailDetails);
+    }
 
-    await transporter.sendMail(mailDetails);
+    sendEmail().catch(console.error)
+
 }
-
-sendEmail().catch(console.error)
-
 async function jobScraperAndSender() {
     const jobs = await scrapeJobs();
     await sendEmail(jobs);
 }
 
-// Schedule the job scraper and sender
 cron.schedule(deliveryFrequency, jobScraperAndSender);
 
 console.log(`Job scraper scheduled with frequency: ${deliveryFrequency}`);
