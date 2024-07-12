@@ -148,36 +148,39 @@ async function scrapeJobs() {
         ).join("<br>");
     }
 
-    async function sendEmail(jobs) {
-        let transporter = nodemailer.createTransport({
-            service: "gmail",
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true, // Use `true` for port 465, `false` for all other ports
-            auth: {
-                user: adminEmail,
-                pass: adminEmailPassword
-            },
-            tls: {
-                // do not fail on invalid certs
-                rejectUnauthorized: false,
-            },
-        });
+    const emailBody = formatEmailBody(jobs);
 
-        let mailDetails = {
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // Use `true` for port 465, `false` for all other ports
+        auth: {
+            user: adminEmail,
+            pass: adminEmailPassword
+        },
+        tls: {
+            // do not fail on invalid certs
+            rejectUnauthorized: false,
+        },
+    });
+
+    async function sendEmail() {
+        const info = await transporter.sendMail({
             from: adminEmail,
             to: userEmail,
             subject: `Job Listings for ${jobTitle}`,
             text: jobResults,
-            html: formatEmailBody(jobs)
-        };
+            html: emailBody
+        });
 
-        await transporter.sendMail(mailDetails);
+        console.log("Message sent: %s", info.messageId);
     }
 
     sendEmail().catch(console.error)
 
 }
+
 async function jobScraperAndSender() {
     const jobs = await scrapeJobs();
     await sendEmail(jobs);
