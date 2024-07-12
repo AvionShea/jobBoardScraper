@@ -22,7 +22,7 @@ Built with Node.js, No Name Job Board is a customizable web scraper platform tha
 
 ## <a name="features">Features</a>
 
-👉 **Custom Job Boards**: Search any job board you can image just by providing the needed information.
+👉 **Custom Job Boards**: Search any job board you can imagine just by providing the needed information.
 
 👉 **Automated Emails**: Integrates Nodemailer and node-cron to send a list of scraped jobs.
 
