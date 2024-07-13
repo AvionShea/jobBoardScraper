@@ -3,11 +3,11 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 const { executablePath } = require('puppeteer');
 
-require('dotenv').config({ path: "../job-scraper/.env" });
+require('dotenv').config();
 
 const nodemailer = require('nodemailer');
-const cron = require('node-cron');
 
+const cron = require('node-cron');
 const deliveryFrequency = "*/30 * * * * *"; //Cron schedule
 
 const adminEmail = process.env.ADMIN_EMAIL //replace with your email
@@ -16,7 +16,7 @@ const userEmail = process.env.RECIPIENT_EMAIL; //replace with recipient email
 
 
 const jobTitle = "Software Developer"; //enter job tile searching for
-const jobLocation = "27603" //enter city, state, zip code, or "remote" of location wanted
+const jobLocation = "New York, New York" //enter city, state, zip code, or "remote" of location wanted
 
 const jobBoards = [
     {
@@ -148,8 +148,6 @@ function formatEmailBody(jobResults) {
     ).join("<br>");
 }
 
-const emailBody = formatEmailBody(jobResults);
-
 const transporter = nodemailer.createTransport({
     service: "gmail",
     host: "smtp.gmail.com",
@@ -166,6 +164,8 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendEmail() {
+
+    const emailBody = formatEmailBody(jobResults);
 
     let mailOptions = {
         from: adminEmail,
