@@ -14,6 +14,37 @@ const adminEmail = process.env.ADMIN_EMAIL //replace with your email
 const adminEmailPassword = process.env.ADMIN_EMAIL_PASSWORD; //replace with your email password
 const userEmail = process.env.RECIPIENT_EMAIL; //replace with recipient email
 
+
+const jobTitle = "Software Developer"; //enter job tile searching for
+const jobLocation = "27603" //enter city, state, zip code, or "remote" of location wanted
+
+const jobBoards = [
+    {
+        name: "Indeed", //website name
+        url: "https://www.indeed.com/", //website URL
+        searchJobTitle: "input[id='text-input-what']", //search by job title
+        clearSearch: "#jobsearch > div > div.css-13s6tc1.eu4oa1w0 > div.css-1jk1vg0.eu4oa1w0 > div > div > span > span.css-16oh2fs.e6fjgti0", //clears default location
+        searchLocation: "input[id='text-input-where']", //search by location
+        searchBtn: "button[class='yosegi-InlineWhatWhere-primaryButton']", // search button url
+        datePostedFilter: "#filter-dateposted",
+        datePostedFilterMenu: "#filter-dateposted-menu",
+        dropdownList: ".yosegi-FilterPill-dropdownList",
+        dropdownListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
+        dropdownDatePostedOption: "Last 14 days", // change based on available dropdown date posted options
+        expLvlFilter: "#filter-explvl",
+        expLvlFilterMenu: "#filter-explvl-menu",
+        expLvlDropdownOption: "Entry Level", //change based on available level options
+        cardsSelector: "div[class='job_seen_beacon']",
+        titleSelector: "h2[class='jobTitle css-198pbd eu4oa1w0']",
+        companySelector: "span[class='css-63koeb eu4oa1w0']",
+        locationSelector: "div[data-testid='text-location']",
+        linkSelector: "h2[class='jobTitle css-198pbd eu4oa1w0'] > a",
+
+    }
+];
+
+const jobResults = [];
+
 async function scrapeJobs() {
 
     const browser = await puppeteer.launch({
@@ -21,37 +52,6 @@ async function scrapeJobs() {
         executablePath: executablePath(),
     });
     const page = await browser.newPage(); // opens new blank page
-
-    const jobTitle = "Software Developer"; //enter job tile searching for
-    const jobLocation = "27603" //enter city, state, zip code, or "remote" of location wanted
-
-    const jobBoards = [
-        {
-            name: "Indeed", //website name
-            url: "https://www.indeed.com/", //website URL
-            searchJobTitle: "input[id='text-input-what']", //search by job title
-            clearSearch: "#jobsearch > div > div.css-13s6tc1.eu4oa1w0 > div.css-1jk1vg0.eu4oa1w0 > div > div > span > span.css-16oh2fs.e6fjgti0", //clears default location
-            searchLocation: "input[id='text-input-where']", //search by location
-            searchBtn: "button[class='yosegi-InlineWhatWhere-primaryButton']", // search button url
-            datePostedFilter: "#filter-dateposted",
-            datePostedFilterMenu: "#filter-dateposted-menu",
-            dropdownList: ".yosegi-FilterPill-dropdownList",
-            dropdownListItemLink: "a.yosegi-FilterPill-dropdownListItemLink",
-            dropdownDatePostedOption: "Last 14 days", // change based on available dropdown date posted options
-            expLvlFilter: "#filter-explvl",
-            expLvlFilterMenu: "#filter-explvl-menu",
-            expLvlDropdownOption: "Entry Level", //change based on available level options
-            cardsSelector: "div[class='job_seen_beacon']",
-            titleSelector: "h2[class='jobTitle css-198pbd eu4oa1w0']",
-            companySelector: "span[class='css-63koeb eu4oa1w0']",
-            locationSelector: "div[data-testid='text-location']",
-            linkSelector: "h2[class='jobTitle css-198pbd eu4oa1w0'] > a",
-
-        }
-    ];
-
-
-    const jobResults = [];
 
     for (const board of jobBoards) {
         const searchUrl = `${board.url}`;
@@ -135,50 +135,53 @@ async function scrapeJobs() {
 
     //await browser.close();
     console.log(jobResults);
+}
 
+//Send Email
+function formatEmailBody(jobResults) {
+    return jobResults.map((job) =>
 
-    //Send Email
-    function formatEmailBody(jobs) {
-        return jobs?.map((job) =>
-
-            `<div>
+        `<div>
         <h3><a href="${job.link}">${job.title}</a></h3>
         <p>${job.company} - ${job.location}</p>
         </div>`
-        ).join("<br>");
+    ).join("<br>");
+}
+
+const emailBody = formatEmailBody(jobResults);
+
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // Use `true` for port 465, `false` for all other ports
+    auth: {
+        user: adminEmail, //must be hardcoded
+        pass: adminEmailPassword //must be hardcoded
+    },
+    tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false,
+    },
+});
+
+async function sendEmail() {
+
+    let mailOptions = {
+        from: adminEmail,
+        to: userEmail,
+        subject: `Job Listings for ${jobTitle} in ${jobLocation}`,
+        //text: jobResults, //does not like text to be an array
+        html: emailBody
     }
 
-    const emailBody = formatEmailBody(jobs);
-
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false, // Use `true` for port 465, `false` for all other ports
-        auth: {
-            user: adminEmail,
-            pass: adminEmailPassword
-        },
-        tls: {
-            // do not fail on invalid certs
-            rejectUnauthorized: false,
-        },
+    await transporter.sendMail(mailOptions, function (error) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log("Email sent successfully!");
+        }
     });
-
-    async function sendEmail() {
-        const info = await transporter.sendMail({
-            from: adminEmail,
-            to: userEmail,
-            subject: `Job Listings for ${jobTitle}`,
-            text: jobResults,
-            html: emailBody
-        });
-
-        console.log("Message sent: %s", info.messageId);
-    }
-
-    sendEmail().catch(console.error)
-
 }
 
 async function jobScraperAndSender() {
