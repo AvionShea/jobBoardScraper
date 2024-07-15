@@ -119,6 +119,12 @@ const jobBoards = [
 
 **Successes**
 
+- Learned the basics of Puppeteer.
+- Completed basic skeleton within a week.
+- Implemented scraping for Indeed.
+- Utilized resources to help find solutions.
+- Learned node-cron scheduler.
+
 ## <a name="more">Author</a>
 
 - LinkedIn - [@avion-cobb](https://www.linkedin.com/in/avion-cobb/)
