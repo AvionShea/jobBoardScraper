@@ -15,8 +15,8 @@ const adminEmailPassword = process.env.ADMIN_EMAIL_PASSWORD; //replace with your
 const userEmail = process.env.RECIPIENT_EMAIL; //replace with recipient email
 
 
-const jobTitle = "Software Developer"; //enter job tile searching for
-const jobLocation = "New York, New York" //enter city, state, zip code, or "remote" of location wanted
+const jobTitle = "Software Engineer"; //enter job tile searching for
+const jobLocation = "Denver, CO" //enter city, state, zip code, or "remote" of location wanted
 
 const jobBoards = [
     {
@@ -48,7 +48,7 @@ const jobResults = [];
 async function scrapeJobs() {
 
     const browser = await puppeteer.launch({
-        headless: false, //grants the ability to see browser actions if set to "false"
+        headless: true, //grants the ability to see browser actions if set to "false"
         executablePath: executablePath(),
     });
     const page = await browser.newPage(); // opens new blank page
