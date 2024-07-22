@@ -124,6 +124,7 @@ const jobBoards = [
 - Implemented scraping for Indeed.
 - Utilized resources to help find solutions.
 - Learned node-cron scheduler.
+- Learned to add a "start" script.
 
 ## <a name="more">Author</a>
 
