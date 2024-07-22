@@ -60,7 +60,7 @@ npm install
 **Running the Project**
 
 ```bash
-node board-scraper.js
+npm start
 ```
 
 Opens in new Chromium browser.

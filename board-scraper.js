@@ -15,8 +15,8 @@ const adminEmailPassword = process.env.ADMIN_EMAIL_PASSWORD; //replace with your
 const userEmail = process.env.RECIPIENT_EMAIL; //replace with recipient email
 
 
-const jobTitle = "Software Engineer"; //enter job tile searching for
-const jobLocation = "Denver, CO" //enter city, state, zip code, or "remote" of location wanted
+const jobTitle = "JavaScript"; //enter job tile searching for
+const jobLocation = "Raleigh, NC" //enter city, state, zip code, or "remote" of location wanted
 
 const jobBoards = [
     {
