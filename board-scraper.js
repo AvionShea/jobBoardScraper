@@ -8,7 +8,7 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 
 const cron = require('node-cron');
-const deliveryFrequency = "*/30 * * * * *"; //Cron schedule
+const deliveryFrequency = "0 17 * * 1-5"; //Cron schedule
 
 const adminEmail = process.env.ADMIN_EMAIL //replace with your email
 const adminEmailPassword = process.env.ADMIN_EMAIL_PASSWORD; //replace with your email password
