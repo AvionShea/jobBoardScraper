@@ -108,6 +108,7 @@ const jobBoards = [
 - [Puppeteer](https://pptr.dev/category/introduction)
 - [Avoiding Bot Detection](https://www.zenrows.com/blog/puppeteer-avoid-detection#puppeteer-stealth)
 - [How to run Cron Jobs in Node.js?](https://www.geeksforgeeks.org/how-to-run-cron-jobs-in-node-js/amp/)
+- [Cron Jobs Scheduler Expression](https://crontab.guru/#)
 - [How to send email with Nodemailer using Gmail account in Node?](https://www.geeksforgeeks.org/how-to-send-email-with-nodemailer-using-gmail-account-in-node-js/amp/)
 
 ## <a name="challengesAndSuccesses">Challenges and Successes</a>
